@@ -89,5 +89,65 @@ export const userService = {
         } catch (error) {
             console.error(error)
         }
+    },
+
+    reserveTransfer: async (req: Request, res: Response) => {
+        const { 
+            name,
+            surname,
+            email,
+            phone,
+            rateKey,
+            type,
+            direction,
+            code,
+            companyName,
+            clientReference,
+            welcomeMessage,
+            remark
+         } = req.body
+        try {
+            const transfer = await axios.post('https://api.test.hotelbeds.com/transfer-api/1.0/bookings', {
+                    language: "en",
+                    holder: {
+                        name,
+                        surname,
+                        email,
+                        phone
+                    },
+                    transfers: [
+                        {
+                            rateKey,
+                            transferDetails: [
+                                {
+                                    type,
+                                    direction,
+                                    code,
+                                    companyName
+                                }
+                            ]
+                        }
+                    ],                    
+                    clientReference,
+                    welcomeMessage,
+                    remark
+
+            }, {
+                headers: {
+                    'Api-key': '6c283a51234f840091c29b61fdb0a8cf',
+                    "X-Signature": 'd9371c9b74f4069ad662b1adfc4b0192528436e1a33191f9672f0938bd46affa'
+                }
+            })
+            return res.status(201).json({
+                ok: true,
+                response: transfer.data
+            })
+        } catch (error) {
+            return res.status(401).json({
+                body: req.body,
+                error,
+                message: 'Authorization field missing'
+            })
+        }
     }
 }
