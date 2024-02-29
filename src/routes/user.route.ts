@@ -6,7 +6,7 @@ const router = Router()
 
 router.post('/register', userService.register)
 router.post('/login', userService.login)
-router.get('/transfer', validationToken, userService.getTransfers)
+router.get('/transfer/', validationToken, userService.getTransfers)
 router.post('/reserve', validationToken, userService.reserveTransfer)
 
 export default router;

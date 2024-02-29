@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { User } from "../models/users.model";
 import { v4 as uuidv4 } from 'uuid'
 import * as bcrypt from 'bcrypt'
-import jwt from 'jsonwebtoken';
+import jwt, { Secret } from 'jsonwebtoken';
 import axios from 'axios'
 
 export const userService = {
@@ -40,6 +40,7 @@ export const userService = {
 
     login: async (req: Request, res: Response) => {
         const { email, password } = req.body;
+        const secret = process.env.SECRET
         try {
             const query = await User.findOne({
                 where: {email}
@@ -57,7 +58,7 @@ export const userService = {
                     email: query.email
                 }
                 let token = jwt.sign(payload, 'my-secret-key', {
-                    expiresIn: '1d'
+                    expiresIn: '29 days'
                 })
                 return res.status(200).json({
                     ok: true,
@@ -75,8 +76,19 @@ export const userService = {
     },
 
     getTransfers: async (req:Request, res: Response) => {
+        const {
+            ftype,
+            fcode,
+            ttype,
+            tcode,
+            outbound,
+            inbound,
+            adults,
+            children,
+            infants
+        } = req.query
         try {
-            const transfers = await axios.get('https://api.test.hotelbeds.com/transfer-api/1.0/availability/en/from/ATLAS/265/to/IATA/PMI/2024-08-17T12:15:00/2024-09-25T20:00:00/2/0/0', {
+            const transfers = await axios.get(`${process.env.URL}availability/en/from/${ftype}/${fcode}/to/${ttype}/${tcode}/${outbound}/${inbound}/${adults}/${children}/${infants}`, {
                 headers: {
                     'Api-key': '6c283a51234f840091c29b61fdb0a8cf',
                     "X-Signature": 'd9371c9b74f4069ad662b1adfc4b0192528436e1a33191f9672f0938bd46affa'
@@ -84,7 +96,7 @@ export const userService = {
             })
             return res.status(200).json({
                 ok: true,
-                data: transfers.data
+                response: transfers.data
             })
         } catch (error) {
             console.error(error)
@@ -107,7 +119,7 @@ export const userService = {
             remark
          } = req.body
         try {
-            const transfer = await axios.post('https://api.test.hotelbeds.com/transfer-api/1.0/bookings', {
+            const transfer = await axios.post(`${process.env.URL}bookings`, {
                     language: "en",
                     holder: {
                         name,
@@ -144,7 +156,6 @@ export const userService = {
             })
         } catch (error) {
             return res.status(401).json({
-                body: req.body,
                 error,
                 message: 'Authorization field missing'
             })
