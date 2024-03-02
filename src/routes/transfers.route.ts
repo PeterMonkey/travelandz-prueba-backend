@@ -5,5 +5,6 @@ const router = Router()
 
 router.get('/countries', transfersCacheService.getCountries)
 router.get('/destinations', transfersCacheService.getDestinations)
+router.get('/terminals', transfersCacheService.getTerminals)
 
 export default router;
