@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { User } from "../models/users.model";
 import { v4 as uuidv4 } from 'uuid'
 import * as bcrypt from 'bcrypt'
-import jwt, { Secret } from 'jsonwebtoken';
+import jwt from 'jsonwebtoken';
 import axios from 'axios'
 
 export const userService = {
@@ -90,8 +90,8 @@ export const userService = {
         try {
             const transfers = await axios.get(`${process.env.URL}availability/en/from/${ftype}/${fcode}/to/${ttype}/${tcode}/${outbound}/${inbound}/${adults}/${children}/${infants}`, {
                 headers: {
-                    'Api-key': '6c283a51234f840091c29b61fdb0a8cf',
-                    "X-Signature": 'd9371c9b74f4069ad662b1adfc4b0192528436e1a33191f9672f0938bd46affa'
+                    'Api-key': process.env.API_KEY,
+                    "X-Signature": process.env.X_SIGNATURE
                 }
             })
             return res.status(200).json({
@@ -146,8 +146,8 @@ export const userService = {
 
             }, {
                 headers: {
-                    'Api-key': '6c283a51234f840091c29b61fdb0a8cf',
-                    "X-Signature": 'd9371c9b74f4069ad662b1adfc4b0192528436e1a33191f9672f0938bd46affa'
+                    'Api-key': process.env.API_KEY,
+                    "X-Signature": process.env.X_SIGNATURE
                 }
             })
             return res.status(201).json({

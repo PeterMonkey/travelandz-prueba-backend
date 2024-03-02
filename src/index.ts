@@ -3,10 +3,11 @@ import bodyParser from 'body-parser'
 import { connection } from './database/database';
 import userRoute from './routes/user.route'
 import dotenv from 'dotenv'
+import cors from 'cors'
 dotenv.config()
 
 const app: Application = express()
-
+app.use(cors())
 app.use(express.json())
 app.use(bodyParser.urlencoded({ extended: false }));
 
