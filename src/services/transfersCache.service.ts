@@ -7,13 +7,30 @@ export const transfersCacheService = {
         try {
             const countries = await axios.get(`${url}locations/countries?fields=ALL&language=ES&offset=1&limit=300`, {
                 headers: {
-                    'Api-key': process.env.API_KEY,
-                    "X-Signature": process.env.X_SIGNATURE
+                    'Api-key': process.env.API_KEY
                 }
             })
             return res.status(200).json({
                 ok: true,
                 response: countries.data
+            })
+        } catch (error) {
+            console.error(error)
+        }
+    }, 
+
+    getDestinations: async (req: Request, res: Response) => {
+        const url = process.env.URL_CACHE
+        const {countryCodes} = req.params;
+        try {
+            const destinations = await axios.get(`${url}locations/destinations?fields=ALL&language=es&countryCodes=AR`, {
+                headers: {
+                    'Api-key': process.env.API_KEY
+                }
+            })
+            return res.status(200).json({
+                ok: true,
+                response: destinations.data
             })
         } catch (error) {
             console.error(error)

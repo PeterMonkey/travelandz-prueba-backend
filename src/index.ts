@@ -2,6 +2,7 @@ import express, { Application } from 'express';
 import bodyParser from 'body-parser'
 import { connection } from './database/database';
 import userRoute from './routes/user.route'
+import transferRoute from './routes/transfers.route'
 import dotenv from 'dotenv'
 import cors from 'cors'
 dotenv.config()
@@ -15,5 +16,7 @@ connection()
 
 //routes
 app.use(userRoute)
+app.use(transferRoute)
+
 console.log(process.env.SECRET)
 app.listen(3000, () => console.log('Server listen on port:3000'))
