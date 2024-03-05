@@ -53,5 +53,23 @@ export const transfersCacheService = {
         } catch (error) {
             console.error(error)
         }
+    },
+
+    getHotels: async (req: Request, res: Response) => {
+        const url = process.env.URL_CACHE
+        const { countryCode, destinationCode } = req.query;
+        try {
+            const hotel = await axios.get(`${url}hotels?fields=ALL&language=es&countryCodes=${countryCode}&destinationCodes=${destinationCode}`, {
+                headers: {
+                    'APi-key': process.env.API_KEY
+                }
+            })
+            return res.status(200).json({
+                ok: true,
+                response: hotel.data
+            })
+        } catch (error) {
+            console.log(error)
+        }
     }
 }
