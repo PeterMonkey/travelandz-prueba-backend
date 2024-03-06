@@ -96,7 +96,7 @@ export const userService = {
             })
             return res.status(200).json({
                 ok: true,
-                response: transfers.data
+                response: transfers.data.services
             })
         } catch (error) {
             console.error(error)
