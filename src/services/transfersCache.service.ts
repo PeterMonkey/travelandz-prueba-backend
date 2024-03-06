@@ -59,7 +59,7 @@ export const transfersCacheService = {
         const url = process.env.URL_CACHE
         const { countryCode, destinationCode } = req.query;
         try {
-            const hotel = await axios.get(`${url}hotels?fields=ALL&language=es&countryCodes=${countryCode}&destinationCodes=${destinationCode}`, {
+            const hotel = await axios.get(`${url}hotels?fields=ALL&language=es&countryCodes=${countryCode}&destinationCodes=${destinationCode}&limit=1000`, {
                 headers: {
                     'APi-key': process.env.API_KEY
                 }
