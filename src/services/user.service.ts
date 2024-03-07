@@ -28,9 +28,18 @@ export const userService = {
                 email,
                 password: hash
             })
+            const payload = {
+                id: uid,
+                name: name,
+                email: email
+            }
+            let token = jwt.sign(payload, 'my-secret-key', {
+                expiresIn: '29 days'
+            })
             return res.status(201).json({
                 ok: true,
-                message: 'Ususario creado'
+                message: 'Ususario creado',
+                token
             })
             
         } catch (error) {
@@ -110,13 +119,7 @@ export const userService = {
             email,
             phone,
             rateKey,
-            type,
-            direction,
-            code,
-            companyName,
-            clientReference,
-            welcomeMessage,
-            remark
+            direction
          } = req.body
         try {
             const transfer = await axios.post(`${process.env.URL}bookings`, {
@@ -132,17 +135,17 @@ export const userService = {
                             rateKey,
                             transferDetails: [
                                 {
-                                    type,
+                                    type: "FLIGHT",
                                     direction,
-                                    code,
-                                    companyName
+                                    code: "XR1234",
+                                    companyName: null
                                 }
                             ]
                         }
                     ],                    
-                    clientReference,
-                    welcomeMessage,
-                    remark
+                    clientReference: "BOSTON#12-203#456754",
+                    welcomeMessage: "Welcome",
+                    remark: "Booking remarks go here."
 
             }, {
                 headers: {
